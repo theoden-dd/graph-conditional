@@ -6,7 +6,7 @@ from graph_conditional.graphviz import attr_string
 
 
 def nodeattrfunc(node):
-    attr_dict = {
+    attrs = {
         'penwidth': '0'
     }
     # We're using here an ugly hack from the official graphviz forum:
@@ -14,10 +14,10 @@ def nodeattrfunc(node):
     # Unfortunately, I haven't found any good alternatives for controlling a node's label position
     # while keeping it _outside_ of the node.
     # xlabel attribute doesn't work, since it places the label almost arbitrary.
-    attr_dict['label'] = '''<<TABLE CELLSPACING="2" CELLPADDING="2" BORDER="0">
+    attrs['label'] = '''<<TABLE CELLSPACING="2" CELLPADDING="2" BORDER="0">
     <TR><TD><IMG SRC="pics/math-{0}.png" /></TD></TR>
     <tr><td>{1}</td></tr></TABLE>>'''.format(node.name, node.label)
-    return attr_string(attr_dict)
+    return attr_string(attrs)
 
 
 if __name__ == '__main__':
@@ -26,4 +26,14 @@ if __name__ == '__main__':
     child2 = Node('info', parent=root, label='Остров математической информации')
 
     DotExporter(root, nodeattrfunc=nodeattrfunc).to_picture('pics/output.png')
-    run_tkinter()
+
+    tree = {
+        'name': 'root',
+        'label': 'Архипелаг "Математика"',
+        'children': [
+            dict(name='geometry', label='Остров геометрии'),
+            dict(name='info', label='Остров математической информации'),
+        ]
+    }
+
+    run_tkinter(tree)
