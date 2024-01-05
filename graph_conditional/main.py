@@ -1,14 +1,14 @@
+from pathlib import Path
+
+import tomli
+
 from graph_conditional._tcltk import run_tkinter
 
 
 if __name__ == '__main__':
-    tree = {
-        'name': 'root',
-        'label': 'Архипелаг "Математика"',
-        'children': [
-            dict(name='geometry', label='Остров геометрии'),
-            dict(name='info', label='Остров математической информации'),
-        ]
-    }
+    home = Path.home()
 
-    run_tkinter(tree)
+    with open(home / '.graph-conditional.toml', 'rb') as f:
+        config = tomli.load(f)
+
+    run_tkinter(config)
