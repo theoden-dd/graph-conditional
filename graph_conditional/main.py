@@ -1,6 +1,7 @@
 from anytree import Node
 from anytree.exporter import DotExporter
 
+from graph_conditional._tcltk import run_tkinter
 from graph_conditional.graphviz import attr_string
 
 
@@ -25,3 +26,4 @@ if __name__ == '__main__':
     child2 = Node('info', parent=root, label='Остров математической информации')
 
     DotExporter(root, nodeattrfunc=nodeattrfunc).to_picture('pics/output.png')
+    run_tkinter()
