@@ -1,19 +1,22 @@
 """Internal module with tcl/tk tools."""
 import tkinter as tk
+from pathlib import Path
 
 from graph_conditional.graphviz import plot_graph
 
 
-def run_tkinter(tree):
+def run_tkinter(config):
     window = tk.Tk()
     window.title('Условный граф')
     window.geometry('640x480')
 
     tree_controls = {}
+    tree = config['tree']
     _build_tree_controls(tree, window, tree_controls)
 
     def plot_graph_click():
-        plot_graph(tree, tree_controls)
+        pict_root = Path(config['picture_root']).expanduser()
+        plot_graph(tree, tree_controls, pict_root)
 
     b = tk.Button(window, text='Вывести граф', command=plot_graph_click)
     b.pack(side=tk.BOTTOM)
