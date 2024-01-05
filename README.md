@@ -34,10 +34,20 @@ print(some_function(3, 4))
 # => 7
 ```
 
-## License
+## Лицензия (License)
 
 [GPL3](https://github.com/essence/graph-conditional/blob/master/LICENSE)
 
-## Credits
+## Вклад (Credits)
 
-This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [7f04f3b1666ce66e25cb370248f08336c43e696e](https://github.com/wemake-services/wemake-python-package/tree/7f04f3b1666ce66e25cb370248f08336c43e696e). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/7f04f3b1666ce66e25cb370248f08336c43e696e...master) since then.
+Изначальный автор проекта и текущий куратор: [Денис Унтевский](hps://deni.su/care/)
+В помощь [семейной (не)школе "Искатели", Калининград](https://vk.com/club127512260).
+
+
+This project was generated with [`wemake-python-package`](
+    https://github.com/wemake-services/wemake-python-package).
+Current template version is: [7f04f3b1666ce66e25cb370248f08336c43e696e](
+    https://github.com/wemake-services/wemake-python-package/tree/7f04f3b1666ce66e25cb370248f08336c43e696e).
+See what is [updated](
+    https://github.com/wemake-services/wemake-python-package/compare/7f04f3b1666ce66e25cb370248f08336c43e696e...master) 
+since then.
