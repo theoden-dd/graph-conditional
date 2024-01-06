@@ -52,6 +52,16 @@ def _filtered_tree_data(node_data: dict, controls: dict) -> Optional[dict]:
     return attrs
 
 
+def edgeattrfunc(parent, child):
+    attrs = {
+        'minlen': 2/(parent.depth+1),
+        'penwidth': 10 - parent.depth*2,
+        'weight': parent.depth,
+        'color': 'orange',
+    }
+    return attr_string(attrs)
+
+
 def plot_graph(root: dict, controls: dict, pict_root: Path) -> None:
     """Plot the graph with only the selected nodes."""
     filtered_root = _filtered_tree_data(root, controls)
@@ -59,5 +69,15 @@ def plot_graph(root: dict, controls: dict, pict_root: Path) -> None:
     root_node = importer.import_(filtered_root)
 
     DotExporter(
-        root_node, nodeattrfunc=_new_node_attr_func(pict_root),
+        root_node,
+        graph='graph',
+        nodeattrfunc=_new_node_attr_func(pict_root),
+        edgeattrfunc=edgeattrfunc,
+        edgetypefunc=lambda node, child: '--',
+        options=(
+            # 'landscape=true',
+            'node [{}]'.format(attr_string(dict(
+                shape='box'
+            ))),
+        )
     ).to_picture(str(pict_root / 'output.png'))
