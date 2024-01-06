@@ -6,6 +6,17 @@ from anytree.exporter import DotExporter
 from anytree.importer import DictImporter
 
 
+# Keys are strings to be TOML-compatible:
+# https://toml.io/en/v1.0.0#keys
+DEFAULT_EDGE_COLORS = {
+    '0': '#cc292a',
+    '1': '#fb5b75',
+    '2': '#eb7a42',
+    '3': '#ff9734',
+}
+_DEFAULT_EDGE_COLOR = 'orange'
+
+
 def attr_string(attrs: dict) -> str:
     """Convert an attribute dictionary to the respective dot-file attribute string."""
     return ';'.join(
@@ -31,6 +42,9 @@ def _new_node_attr_func(pict_root: Path):
     return _nodeattrfunc
 
 
+# todo: Refactor into the `filter_` parameter of the DotExporter constructor.
+#   Instead of manual traversing:
+#   https://anytree.readthedocs.io/en/latest/exporter/dotexporter.html
 def _filtered_tree_data(node_data: dict, controls: dict) -> Optional[dict]:
     # Check whether we'd like to output this node
     control_data = controls.get(node_data.get('name'))
@@ -52,12 +66,36 @@ def _filtered_tree_data(node_data: dict, controls: dict) -> Optional[dict]:
     return attrs
 
 
-def plot_graph(root: dict, controls: dict, pict_root: Path) -> None:
+def _new_edge_attr_func(edge_colors: dict):
+    def edgeattrfunc(parent, child):
+        # For absent depths use the root depth color or the default color if not set.
+        default_color = edge_colors.get('0', _DEFAULT_EDGE_COLOR)
+        attrs = {
+            'minlen': 2/(parent.depth+1),
+            'penwidth': 10 - parent.depth*2,
+            'weight': parent.depth,
+            'color': '"{}"'.format(edge_colors.get(str(parent.depth), default_color)),
+        }
+        return attr_string(attrs)
+    return edgeattrfunc
+
+
+def plot_graph(root: dict, controls: dict, pict_root: Path, edge_colors: dict) -> None:
     """Plot the graph with only the selected nodes."""
     filtered_root = _filtered_tree_data(root, controls)
     importer = DictImporter()
     root_node = importer.import_(filtered_root)
 
     DotExporter(
-        root_node, nodeattrfunc=_new_node_attr_func(pict_root),
+        root_node,
+        graph='graph',
+        nodeattrfunc=_new_node_attr_func(pict_root),
+        edgeattrfunc=_new_edge_attr_func(edge_colors),
+        edgetypefunc=lambda node, child: '--',
+        options=(
+            # 'landscape=true',
+            'node [{}]'.format(attr_string(dict(
+                shape='box'
+            ))),
+        )
     ).to_picture(str(pict_root / 'output.png'))

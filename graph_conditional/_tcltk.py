@@ -2,7 +2,7 @@
 import tkinter as tk
 from pathlib import Path
 
-from graph_conditional.graphviz import plot_graph
+from graph_conditional.graphviz import DEFAULT_EDGE_COLORS, plot_graph
 
 
 def run_tkinter(config):
@@ -16,7 +16,8 @@ def run_tkinter(config):
 
     def plot_graph_click():
         pict_root = Path(config['picture_root']).expanduser()
-        plot_graph(tree, tree_controls, pict_root)
+        edge_colors = config.get('edge-colors', DEFAULT_EDGE_COLORS)
+        plot_graph(tree, tree_controls, pict_root, edge_colors)
 
     b = tk.Button(window, text='Вывести граф', command=plot_graph_click)
     b.pack(side=tk.BOTTOM)
