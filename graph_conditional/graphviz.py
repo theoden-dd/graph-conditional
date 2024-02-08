@@ -37,7 +37,7 @@ def _new_node_attr_func(pict_root: Path):
         # xlabel attribute doesn't work, since it places the label almost arbitrary.
         attrs['label'] = '''<<TABLE CELLSPACING="2" CELLPADDING="2" BORDER="0">
         <TR><TD><IMG SRC="{0}" /></TD></TR>
-        <tr><td>{1}</td></tr></TABLE>>'''.format(pict_root / pict_name, node.label)
+        <tr><td><font point-size="255pt">{1}</font></td></tr></TABLE>>'''.format(pict_root / pict_name, node.label)
         return attr_string(attrs)
     return _nodeattrfunc
 
@@ -92,6 +92,7 @@ def plot_graph(root: dict, controls: dict, pict_root: Path, edge_colors: dict) -
         nodeattrfunc=_new_node_attr_func(pict_root),
         edgeattrfunc=_new_edge_attr_func(edge_colors),
         edgetypefunc=lambda node, child: '--',
+        # The graph `fontsize` setting here doesn't work for a table text under the node.
         options=(
             # 'landscape=true',
             'node [{}]'.format(attr_string(dict(

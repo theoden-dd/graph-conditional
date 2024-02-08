@@ -51,6 +51,11 @@ def run_tkinter():
         default_picture_root = config_name.parent
         config.setdefault(PICTURE_ROOT_KEY, default_picture_root)
 
+        # Make the picture root relative to the chosen config dir
+        picture_root = Path(config[PICTURE_ROOT_KEY])
+        if not picture_root.is_absolute():
+            config[PICTURE_ROOT_KEY] = default_picture_root / picture_root
+
         show_graph_window(main_window, config, config_name)
 
     b = tk.Button(main_window, text='Выбрать конфигурацию', command=choose_config)
