@@ -37,7 +37,10 @@ def _new_node_attr_func(pict_root: Path):
         # xlabel attribute doesn't work, since it places the label almost arbitrary.
         attrs['label'] = '''<<TABLE CELLSPACING="2" CELLPADDING="2" BORDER="0">
         <TR><TD><IMG SRC="{0}" /></TD></TR>
-        <tr><td><font point-size="255pt">{1}</font></td></tr></TABLE>>'''.format(pict_root / pict_name, node.label)
+        <tr><td><font point-size="255pt">{1}</font></td></tr></TABLE>>'''.format(
+            pict_root / pict_name,
+            node.label if getattr(node, 'label-rendered', False) else ' ',
+        )
         return attr_string(attrs)
     return _nodeattrfunc
 
