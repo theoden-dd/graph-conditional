@@ -27,7 +27,7 @@ anytree = "^2.12.1"
 tomli = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.7"
+mypy = "^1.9"
 
 wemake-python-styleguide = "^0.17"
 flake8-pytest-style = "^1.6"
