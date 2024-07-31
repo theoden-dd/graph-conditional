@@ -67,7 +67,7 @@ def run_tkinter():
 def show_graph_window(parent, config: dict, config_name: Path):
     window = tk.Toplevel(parent)
     window.title('Конфигурация дерева: {}'.format(config_name.name))
-    window.geometry('640x480')
+    window.geometry('640x1280')
 
     tree_controls = {}
     tree = config['tree']

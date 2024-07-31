@@ -27,7 +27,7 @@ def attr_string(attrs: dict) -> str:
 def _new_node_attr_func(pict_root: Path):
     def _nodeattrfunc(node):
         attrs = {
-            'penwidth': '0'
+            'penwidth': '0',
         }
         pict_name = '{0}.png'.format(node.name)
         # We're using here an ugly hack from the official graphviz forum:
@@ -37,7 +37,7 @@ def _new_node_attr_func(pict_root: Path):
         # xlabel attribute doesn't work, since it places the label almost arbitrary.
         attrs['label'] = '''<<TABLE CELLSPACING="2" CELLPADDING="2" BORDER="0">
         <TR><TD><IMG SRC="{0}" /></TD></TR>
-        <tr><td><font point-size="255pt">{1}</font></td></tr></TABLE>>'''.format(
+        <tr><td><font point-size="125pt">{1}</font></td></tr></TABLE>>'''.format(
             pict_root / pict_name,
             node.label if getattr(node, 'label-rendered', False) else ' ',
         )
@@ -74,8 +74,9 @@ def _new_edge_attr_func(edge_colors: dict):
         # For absent depths use the root depth color or the default color if not set.
         default_color = edge_colors.get('0', _DEFAULT_EDGE_COLOR)
         attrs = {
-            'minlen': 2/(parent.depth+1),
-            'penwidth': 10 - parent.depth*2,
+            # 'minlen': 2/(parent.depth+1),  # dot only
+            'len': 60/(parent.depth+1),
+            'penwidth': 12 - parent.depth*2,
             'weight': parent.depth,
             'color': '"{}"'.format(edge_colors.get(str(parent.depth), default_color)),
         }
@@ -97,9 +98,39 @@ def plot_graph(root: dict, controls: dict, pict_root: Path, edge_colors: dict) -
         edgetypefunc=lambda node, child: '--',
         # The graph `fontsize` setting here doesn't work for a table text under the node.
         options=(
-            # 'landscape=true',
+            'splines=curved',
+            'layout=neato',
+            # neato
+            # Changed from 0.5 to 1.5 - seems like it changes nothing.
+            # 'Damping=0.5',
+            'defaultdist=500',
+            'mode=ipsep',
+            'overlap=ipsep',
+            'model=mds',
+            'esep=1.2',
+            'pack=true',
+            # Haven't seen any difference with packmode=graph
+            # 'packmode="graph"',
+            'levelsgap=5',
+            'start=regular',
+            'normalize=0',
+            # fdp
+            # 'overlap=voronoi',
+            # 'overlap_scaling=0.5',
+            'sep=1.3',
+            # 'splines=compound',
+            # sfdp
+            # 'smoothing=spring',
+            # 'mode=maxent',
+            # 'K=7',
+            # 'repulsiveforce=5',
+            # 'quadtree=none',
+            'voro_margin=0.5',
+            # 'beautify=true',
             'node [{}]'.format(attr_string(dict(
-                shape='box'
+                # shape=plain is required to make node fully label-dependent, see:
+                # https://graphviz.org/doc/info/shapes.html#html
+                shape='plain'
             ))),
         )
     ).to_picture(str(pict_root / 'output.png'))
